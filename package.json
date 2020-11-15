@@ -1,0 +1,20 @@
+{
+  "name": "puppeteer-service",
+  "description": "Puppeteer Service",
+  "version": "0.0.1",
+  "private": true,
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "Matt Kaufman",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/the1mattkaufman/puppeteer-service"
+  },
+  "dependencies": {
+    "axios": "^0.20.0",
+    "express": "^4.17.1",
+    "puppeteer": "^5.3.1"
+  }
+}
