@@ -4,8 +4,6 @@ const index = require("./index");
 const DEFAULT_BODY = {
   debug: false,
   headless: true,
-  operation: "getDescription",
-  url: "https://github.com/the1mattkaufman/puppeteer-service",
 };
 
 const server = app.listen(process.env.PORT || 8080, (err) => {
