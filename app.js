@@ -14,7 +14,12 @@ const server = app.listen(process.env.PORT || 8080, (err) => {
 
 app.use(async (req, res) => {
   let startTime = new Date();
-  let body = { optimize: false, url: "https://www.google.com" };
+  let body = {
+    optimize: false,
+    url: "https://www.google.com",
+    headless: true,
+    debug: false,
+  };
   if (req.body) {
     body = req.body;
   }
