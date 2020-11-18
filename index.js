@@ -1,7 +1,4 @@
 const puppeteer = require("puppeteer");
-const USER_AGENT =
-  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36";
-const VIEWPORT = { width: 960, height: 768 };
 const util = require("./util");
 
 const openConnection = async (headlessOption, optimize) => {
@@ -16,12 +13,6 @@ const openConnection = async (headlessOption, optimize) => {
     throw e;
   });
   await page.setDefaultNavigationTimeout(60000);
-  await page.setUserAgent(USER_AGENT).catch((e) => {
-    throw e;
-  });
-  await page.setViewport(VIEWPORT).catch((e) => {
-    throw e;
-  });
 
   if (optimize) {
     //Optimize performance by stripping out visual elements
@@ -54,30 +45,23 @@ const closeConnection = async (page, browser) => {
 };
 
 const runScripts = async (body) => {
-  let result = { isSuccess: true };
-  let optimize = false;
-  let { browser, page } = await openConnection(body.headless, optimize).catch(
-    (e) => {
-      throw e;
-    }
-  );
+  let result = { isSuccess: false };
+  let { browser, page } = await openConnection(
+    body.headless,
+    body.optimize
+  ).catch((e) => {
+    throw e;
+  });
   console.log(body);
-  if (body.operation == "getPostmanEcho") {
-    body.url = "https://postman-echo.com/get?foo1=bar1&foo2=bar2";
-    await page.goto(body.url);
-    result.value = await page.content();
-  } else if (body.operation === "githubDescription") {
-    body.url = "https://github.com/the1mattkaufman/puppeteer-service";
-    await page.goto(body.url);
-    await page.waitForTimeout(5000).catch((e) => {
-      console.error(e);
-    });
-    let r = await page.$eval(".mt-3", (el) => el.textContent);
-    result.value = r;
-    const pageUrl = await page.url();
-    result.url = pageUrl;
+  if (body.operation === "githubDescription") {
+    result = await getGithubDescription(page, body);
   } else if (body.operation === "takeOverTheWorld") {
-    await takeOverTheWorld(page);
+    result = await takeOverTheWorld(page);
+  } else if (body.url) {
+    //good example of a webservice "https://postman-echo.com/get?foo1=bar1&foo2=bar2";
+    await page.goto(body.url);
+    result.isSuccess = true;
+    result.value = await page.content();
   }
   await closeConnection(page, browser).catch((e) => {
     throw e;
@@ -86,19 +70,43 @@ const runScripts = async (body) => {
 };
 
 /**
+ * @name getGithubDescription
+ * @description Grabs the description of a Github repo
+ * @param {*} page
+ * @param {*} body
+ */
+const getGithubDescription = async (page, body) => {
+  let result = { isSuccess: true };
+  if (!body.url || body.url.indexOf("github") < 0) {
+    body.url = "https://github.com/the1mattkaufman/puppeteer-service";
+  }
+  await page.goto(body.url);
+  await page.waitForTimeout(5000).catch((e) => {
+    console.error(e);
+  });
+  let r = await page.$eval(".mt-3", (el) => el.textContent);
+  result.value = r;
+  const pageUrl = await page.url();
+  result.url = pageUrl;
+  return result;
+};
+
+/**
  * @description Demo of filling out and submitting a form
  */
 const takeOverTheWorld = async (page) => {
+  result = { isSuccess: true };
   const url = "https://www.survey-maker.com/poll3231341xea7f464b-100";
   await page.goto(url, {
     waitUntil: "networkidle2",
   });
   await util.wait(page, 1000);
-  await util.clickIt(page, ".qp_a", "innerHTML", "Test my website");
+  await util.clickIt(page, ".qp_a", "innerHTML", "Take over the world");
   // Slow down the page for demo purposes
   await util.wait(page, 1000);
   await util.clickIt(page, "input", "value", "Vote");
-  await util.wait(page, 5000);
+  await util.wait(page, 1000);
+  return result;
 };
 
 exports.runScripts = runScripts;

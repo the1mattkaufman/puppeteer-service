@@ -14,7 +14,7 @@ const server = app.listen(process.env.PORT || 8080, (err) => {
 
 app.use(async (req, res) => {
   let startTime = new Date();
-  let body = {};
+  let body = { optimize: false, url: "https://www.google.com" };
   if (req.body) {
     body = req.body;
   }
@@ -31,7 +31,6 @@ app.use(async (req, res) => {
   let result = await index.runScripts(body);
   result.start = startTime;
   result.end = new Date();
-  console.debug(result);
   res.json(result);
 });
 
