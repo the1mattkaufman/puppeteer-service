@@ -62,6 +62,7 @@ const runScripts = async (body) => {
     await page.goto(body.url);
     result.isSuccess = true;
     result.value = await page.content();
+    await util.wait(page, 10000);
   }
   await closeConnection(page, browser).catch((e) => {
     throw e;
@@ -88,6 +89,7 @@ const getGithubDescription = async (page, body) => {
   result.value = r;
   const pageUrl = await page.url();
   result.url = pageUrl;
+  await util.wait(page, 5000);
   return result;
 };
 
@@ -105,7 +107,8 @@ const takeOverTheWorld = async (page) => {
   // Slow down the page for demo purposes
   await util.wait(page, 1000);
   await util.clickIt(page, "input", "value", "Vote");
-  await util.wait(page, 1000);
+  await util.wait(page, 2000);
+  await util.clickIt(page, "input", "value", "Next");
   return result;
 };
 
