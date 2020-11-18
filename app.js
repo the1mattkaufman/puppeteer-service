@@ -36,6 +36,7 @@ app.use(async (req, res) => {
   let result = await index.runScripts(body);
   result.start = startTime;
   result.end = new Date();
+  console.log(result);
   res.json(result);
 });
 
