@@ -67,10 +67,9 @@ const handleRequest = async (req, res) => {
   if ( body.url && body.url.indexOf('hilton.com') > 0 ){
     await pup.goto(page, body.url);
     util.log(await page.url(), 'startUrl');
-    await Promise.all([
-      page.waitForNavigation(),
-      Object.assign(result, await pup.getInnerOf(page, "p", "data-testid", "priceInfo"))
-    ]);
+    await page.waitForNavigation();
+    await pup.wait(page, 5000);
+    Object.assign(result, await pup.getInnerOf(page, "p", "data-testid", "priceInfo"));
   }
 
   await closeConnection(page, browser).catch((e) => {
