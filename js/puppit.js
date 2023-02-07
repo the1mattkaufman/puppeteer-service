@@ -88,22 +88,22 @@ const click = async (page, selector, propertyName, propertyValue, target) => {
     result.errorMessage = 'did not find'+propertyValue;
   }
   return result;
-};
+}
 
 const goto = async (page, url) => {
   await page.goto(url).catch((e) => {
     console.error("goto: " + url, e);
   });
-};
+}
 
 const getContent = async (page) => {
   const pageContent = await page.content().catch((e) => {
     console.error("getContent", e);
   });
   return pageContent;
-};
+}
 
-const getInnerOf = async (async (page, selector, propertyName, propertyValue) => {
+const getInnerOf = async (page, selector, propertyName, propertyValue) => {
   const result = { isSuccess: false, errorMessage: ''};
   let toFind;
   const elements = await page.$$(selector);
@@ -159,7 +159,7 @@ const type = async (page, selector, value) => {
   await page.type(selector, value).catch((e) => {
     console.error("type: " + selector + " " + value, e);
   });
-};
+}
 
 /**
  * @name selectOption
@@ -171,7 +171,7 @@ const selectOption = async (page, selector, value) => {
   await page.select(selector, value).catch((e) => {
     console.error("selectOption: ", e);
   });
-};
+}
 
 /**
  * @name wait
@@ -180,7 +180,7 @@ const selectOption = async (page, selector, value) => {
  */
 const wait = async (page, timeout) => {
   await page.waitForTimeout(timeout);
-};
+}
 
 exports.click = click;
 exports.shadowClick = shadowClick;
