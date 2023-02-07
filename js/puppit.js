@@ -124,7 +124,10 @@ const getInnerOf = async (page, selector, propertyName, propertyValue) => {
     } else if (propertyName == "name") {
       elementValue = await page.evaluate((el) => el.name, element);
     } else if (propertyName.indexOf('data-')===0){
-      elementValue = await page.$('['+propertyName+'*="'+propertyValue+'"]');
+      // elementValue = await page.$('['+propertyName+'*="'+propertyValue+'"]');
+      const sel = '['+propertyName+'="'+propertyValue+'"]';
+      console.log(sel);
+      elementValue = await page.evaluate(() => document.querySelector(sel).innerText);
       console.log(elementValue);
     } else {
       elementValue = await page.evaluate(
