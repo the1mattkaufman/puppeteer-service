@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require('body-parser')
 const app = express();
 const puppeteer = require("puppeteer");
-const pup = require("./puppit");
+const pup = require("./js/puppit");
 const util = require("./js/util");
 const USER_AGENT = util.randomUserAgent();
 
