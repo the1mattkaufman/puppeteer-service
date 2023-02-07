@@ -35,7 +35,11 @@ const handleRequest = async (req, res) => {
     util.log( req.body,
       "request header content-type is NOT application/json and MANUALLY parsing the req body as json"
     );
-    body = JSON.parse(req.body);
+    try {
+      body = JSON.parse(req.body);
+    } catch ( e ){
+      
+    }
   }
   if (req.query) {
     for (let q in req.query) {
