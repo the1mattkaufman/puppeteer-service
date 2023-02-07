@@ -65,7 +65,7 @@ const handleRequest = async (req, res) => {
     util.log(await page.url(), 'startUrl');
     await Promise.all([
       page.waitForNavigation(),
-      Object.assign(result, await pup.getInnerOf(page, "p", "data-testid", "priceInfo")
+      Object.assign(result, await pup.getInnerOf(page, "p", "data-testid", "priceInfo"))
     ]);
   }
 
