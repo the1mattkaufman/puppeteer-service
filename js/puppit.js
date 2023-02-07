@@ -127,7 +127,7 @@ const getInnerOf = async (page, selector, propertyName, propertyValue) => {
       // elementValue = await page.$('['+propertyName+'*="'+propertyValue+'"]');
       const sel = '['+propertyName+'="'+propertyValue+'"]';
       console.log(sel);
-      elementValue = await page.evaluate(() => document.querySelector(sel).innerText);
+      elementValue = await page.evaluate((sel) => document.querySelector(sel).innerText, sel);
       console.log(elementValue);
     } else {
       elementValue = await page.evaluate(
