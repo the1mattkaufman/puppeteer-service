@@ -123,6 +123,9 @@ const getInnerOf = async (page, selector, propertyName, propertyValue) => {
       elementValue = await page.evaluate((el) => el.href, element);
     } else if (propertyName == "name") {
       elementValue = await page.evaluate((el) => el.name, element);
+    } else if (propertyName.indexOf('data-')===0){
+      elementValue = await page.$('['+propertyName+'*="'+propertyValue+'"]');
+      console.log(elementValue);
     } else {
       elementValue = await page.evaluate(
         (el, propertyName) => {
