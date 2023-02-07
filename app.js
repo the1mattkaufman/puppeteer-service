@@ -96,7 +96,7 @@ const openConnection = async (body) => {
 
   // if body.headless is false, it breaks out
   if ( body && util.isFalse(body.headless) ) {
-    PUPPETEER_OPTIONS.headless = false;
+    // PUPPETEER_OPTIONS.headless = false;
   }
   if (body && body.useTor && util.isTrue(body.useTor)) {
     args.push("--proxy-server=http://127.0.0.1:8118");
