@@ -13,7 +13,7 @@
     "url": "https://github.com/the1mattkaufman/puppeteer-service"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "puppeteer": "^19.6.3"
+    "express": "^4.17.1",
+    "puppeteer": "^15.1.1"
   }
 }
