@@ -109,25 +109,28 @@ const getInnerOf = async (page, selector, propertyName, propertyValue) => {
   const elements = await page.$$(selector);
   for (let i = 0; i < elements.length; i++) {
     const element = elements[i];
-    let foundElement;
     // TODO: Need to fix this to not search the whole page within a for loop
     util.log( element , 'element');
     util.log( element.attributes , 'element.attributes');
-    util.log( (await element.getProperty('data-testid')),'getProperty');
-    if (propertyName.indexOf('data-')===0){
-      const sel = '['+propertyName+'="'+propertyValue+'"]';
-      foundElement = await page.evaluate((sel) => document.querySelector(sel), sel);
-      util.log(foundElement, 'foundElement');
-    } else {
-      foundElement = await page.evaluate((el) => el, element);
-    }
-    if (foundElement) {
-      toFind = foundElement;
+    const foundValue = await element.getProperty(propertyName);
+    util.log( foundValue,'getProperty');
+    if ( foundValue === propertyValue ){
+      toFind = element;
       break;
     }
+    // if (propertyName.indexOf('data-')===0){
+    //   const sel = '['+propertyName+'="'+propertyValue+'"]';
+    //   foundElement = await page.evaluate((sel) => document.querySelector(sel), sel);
+    //   util.log(foundElement, 'foundElement');
+    // } else {
+    //   foundElement = await page.evaluate((el) => el, element);
+    // }
+    // if (foundElement) {
+    //   toFind = foundElement;
+    //   break;
+    // }
   }
   if (toFind) {
-    util.log( propertyValue, 'finding' );
     try {
       result.innerText = toFind.textContent;
     } catch (e){

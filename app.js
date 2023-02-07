@@ -113,7 +113,7 @@ const openConnection = async (body) => {
     throw e;
   });
   try {
-    await page.setDefaultNavigationTimeout(60000);
+    await page.setDefaultNavigationTimeout(90000);
   } catch (e){
     console.error('Could not set timeout',e)
   }
