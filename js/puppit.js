@@ -189,3 +189,4 @@ exports.goto = goto;
 exports.wait = wait;
 exports.type = type;
 exports.selectOption = selectOption; 
+exports.getInnerOf = getInnerOf;
