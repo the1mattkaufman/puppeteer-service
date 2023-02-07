@@ -109,44 +109,33 @@ const getInnerOf = async (page, selector, propertyName, propertyValue) => {
   const elements = await page.$$(selector);
   for (let i = 0; i < elements.length; i++) {
     const element = elements[i];
-    let elementValue;
-    if (propertyName === "id" ){
-      elementValue = await page.evaluate((el) => el.id, element);
-    }
-    else if (propertyName === "innerHTML") {
-      elementValue = await page.evaluate((el) => el.innerHTML, element);
-    } else if (propertyName == "innerText") {
-      elementValue = await page.evaluate((el) => el.innerText, element);
-    } else if (propertyName == "value") {
-      elementValue = await page.evaluate((el) => el.value, element);
-    } else if (propertyName == "href") {
-      elementValue = await page.evaluate((el) => el.href, element);
-    } else if (propertyName == "name") {
-      elementValue = await page.evaluate((el) => el.name, element);
-    } else if (propertyName.indexOf('data-')===0){
+    let foundElement;
+    if (propertyName.indexOf('data-')===0){
       // elementValue = await page.$('['+propertyName+'*="'+propertyValue+'"]');
       const sel = '['+propertyName+'="'+propertyValue+'"]';
-      console.log(sel);
-      elementValue = await page.evaluate((sel) => document.querySelector(sel).innerText, sel);
-      console.log(elementValue);
+      util.log(sel, 'sel');
+      foundElement = await page.evaluate((sel) => document.querySelector(sel), sel);
+      util.log(foundElement, 'foundElement');
     } else {
-      elementValue = await page.evaluate(
-        (el, propertyName) => {
-          el.getAttribute(propertyName);
-        },
-        element,
-        propertyName
-      );
+      foundElement = await page.evaluate((el) => el, element);
     }
-    if (elementValue && elementValue.indexOf(propertyValue) >= 0) {
-      toFind = element;
+    if (foundElement) {
+      toFind = foundElement;
       break;
     }
   }
   if (toFind) {
     util.log( propertyValue, 'finding' );
-    result.innerText = toFind.textContent;
-    result.innerHTML = toFind.innerHTML;
+    try {
+      result.innerText = toFind.textContent;
+    } catch (e){
+      console.log(e);
+    }
+    try {
+      result.innerHTML = toFind.innerHTML;
+    } catch (e){
+      console.log(e);
+    }
     result.isSuccess = true;
   } else {
     util.log( propertyValue, 'did not find');
