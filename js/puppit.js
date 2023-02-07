@@ -112,7 +112,8 @@ const getInnerOf = async (page, selector, propertyName, propertyValue) => {
     let foundElement;
     // TODO: Need to fix this to not search the whole page within a for loop
     util.log( element , 'element');
-    
+    util.log( element.attributes , 'element.attributes');
+
     if (propertyName.indexOf('data-')===0){
       const sel = '['+propertyName+'="'+propertyValue+'"]';
       foundElement = await page.evaluate((sel) => document.querySelector(sel), sel);
