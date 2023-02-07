@@ -1,22 +1,23 @@
-FROM buildkite/puppeteer:latest
+FROM dperson/torproxy
 
-ENV HOME /app
-WORKDIR $HOME
+# To Run
+# sudo docker run -it -p 8118:8118 -p 9050:9050 -d dockerpuppeteertor:latest
 
-RUN mv /node_modules $HOME/node_modules
-COPY package.json $HOME/
-ARG CACHEBUST=1
-RUN npm i
-COPY . $HOME
+# To Test from within the containers shell:
+# curl -Lx http://127.0.0.1:8118 https://check.torproject.org/api/ip
 
-RUN groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
-    && mkdir -p $HOME/pptruser/Downloads \
-    && chown -R pptruser:pptruser $HOME/pptruser \
-    && chown -R pptruser:pptruser $HOME/node_modules \
-    && chown -R pptruser:pptruser $HOME/
+RUN apk add --no-cache make gcc g++ python3 git nodejs nodejs-npm yarn libstdc++ chromium
 
-USER pptruser
+WORKDIR /usr/src/app
+COPY . ./
+RUN npm install
+COPY onrun.sh /usr/bin/
+
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+
+VOLUME ["/etc/tor", "/var/lib/tor"]
 
 EXPOSE 8080
 
-CMD [ "npm", "start" ]
+ENTRYPOINT ["/sbin/tini", "--", "/usr/bin/onrun.sh"]
