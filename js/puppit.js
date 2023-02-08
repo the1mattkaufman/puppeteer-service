@@ -107,8 +107,7 @@ const getInnerOf = async (page, selector, propertyName, propertyValue) => {
   const result = { isSuccess: false, errorMessage: ''};
   const sel = '['+propertyName+'="'+propertyValue+'"]';
   const tags = await page.evaluate((sel) => {
-    const arr = Array.from(document.querySelectorAll(sel));
-    return arr;
+    return document.querySelectorAll(sel);
   },sel);
   util.log(tags,'tags'); 
   if (tags.length > 0 ){
