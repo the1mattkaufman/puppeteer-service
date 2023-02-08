@@ -105,64 +105,29 @@ const getContent = async (page) => {
 
 const getInnerOf = async (page, selector, propertyName, propertyValue) => {
   const result = { isSuccess: false, errorMessage: ''};
-  let toFind;
   const sel = '['+propertyName+'="'+propertyValue+'"]';
   const tags = await page.evaluate((sel) => {
     const arr = Array.from(document.querySelectorAll(sel));
     return arr;
   },sel);
-
-
-  // const tags = await page.evaluate(() => {
-  //   Array.from(document.querySelectorAll(sel), element => {
-  //     element.textContent
-  //   })
-  // });
   util.log(tags,'tags'); 
-  if (tags.length() > 0 ){
-    tags.forEach((tag) => {
-      console.log(tag.innerHTML)
-    })
-    toFind = tags[0];
-  }
-  // toFind = tags[0];
-
-  // const elements = await page.$$(selector);
-  // for (let i = 0; i < elements.length; i++) {
-  //   const element = elements[i];
-  //   // TODO: Need to fix this to not search the whole page within a for loop
-  //   util.log( element , 'element');
-  //   util.log( element.attributes , 'element.attributes');
-  //   const foundValue = await element.getProperty(propertyName);
-  //   util.log( foundValue,'getProperty');
-  //   if ( foundValue === propertyValue ){
-  //     toFind = element;
-  //     break;
-  //   }
-  //   // if (propertyName.indexOf('data-')===0){
-  //   //   const sel = '['+propertyName+'="'+propertyValue+'"]';
-  //   //   foundElement = await page.evaluate((sel) => document.querySelector(sel), sel);
-  //   //   util.log(foundElement, 'foundElement');
-  //   // } else {
-  //   //   foundElement = await page.evaluate((el) => el, element);
-  //   // }
-  //   // if (foundElement) {
-  //   //   toFind = foundElement;
-  //   //   break;
-  //   // }
-  // }
-  if (toFind) {
-    result.textContent = toFind.innerHTML;
-    // try {
-    //   result.innerText = toFind.textContent;
-    // } catch (e){
-    //   console.log(e);
-    // }
-    // try {
-    //   result.innerHTML = toFind.innerHTML;
-    // } catch (e){
-    //   console.log(e);
-    // }
+  if (tags.length > 0 ){
+    let toFind = tags[0];
+    try {
+      result.textContent = toFind.textContent;
+    } catch (e){
+      console.log(e);
+    }
+    try {
+      result.innerHTML = toFind.innerHTML;
+    } catch (e){
+      console.log(e);
+    }
+    try {
+      result.innerText = toFind.innerText;
+    } catch (e){
+      console.log(e);
+    }
     result.isSuccess = true;
   } else {
     util.log( propertyValue, 'did not find');
