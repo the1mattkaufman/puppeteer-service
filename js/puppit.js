@@ -107,9 +107,21 @@ const getInnerOf = async (page, selector, propertyName, propertyValue) => {
   const result = { isSuccess: false, errorMessage: ''};
   let toFind;
   const sel = '['+propertyName+'="'+propertyValue+'"]';
-  const tags = await page.evaluate(() => Array.from(document.querySelectorAll(sel), element => element.textContent,sel));
-  util.log(tags,'tags');
-  toFind = tags[0];
+  const tags = document.querySelectorAll(sel);
+
+  if (tags.length() > 0 ){
+    tags.forEach((tag) => {
+      console.log(tag.innerHTML)
+    })
+    toFind = tags[0];
+  }
+  // const tags = await page.evaluate(() => {
+  //   Array.from(document.querySelectorAll(sel), element => {
+  //     element.textContent
+  //   })
+  // });
+  // util.log(tags,'tags'); 
+  // toFind = tags[0];
 
   // const elements = await page.$$(selector);
   // for (let i = 0; i < elements.length; i++) {
@@ -136,7 +148,7 @@ const getInnerOf = async (page, selector, propertyName, propertyValue) => {
   //   // }
   // }
   if (toFind) {
-    result.textContent = toFind;
+    result.textContent = toFind.innerHTML;
     // try {
     //   result.innerText = toFind.textContent;
     // } catch (e){
