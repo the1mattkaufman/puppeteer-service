@@ -107,7 +107,7 @@ const getInnerOf = async (page, selector, propertyName, propertyValue) => {
   const result = { isSuccess: false, errorMessage: ''};
   let toFind;
   const sel = '['+propertyName+'="'+propertyValue+'"]';
-  const tags = await page.evaluate(() => Array.from(document.querySelectorAll(sel), element => element.textContent));
+  const tags = await page.evaluate(() => Array.from(document.querySelectorAll(sel), element => element.textContent),sel);
   util.log(tags,'tags');
   toFind = tags[0];
 
