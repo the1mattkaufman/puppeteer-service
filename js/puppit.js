@@ -107,29 +107,8 @@ const getInnerOf = async (page, selector, propertyName, propertyValue) => {
   const result = { isSuccess: false, errorMessage: ''};
   const sel = '['+propertyName+'="'+propertyValue+'"]';
   const tags = await page.$eval('[data-testid="priceInfo"]', el => el.textContent);
-
-  // const tags = await page.evaluate((sel) => {
-  //   return document.querySelectorAll(sel);
-  // },sel);
-  util.log(tags,'tags'); 
-  if (tags.length > 0 ){
-    let toFind = tags[0];
-    // try {
-    //   result.textContent = toFind.textContent;
-    // } catch (e){
-    //   console.log(e);
-    // }
-    // try {
-    //   result.innerHTML = toFind.innerHTML;
-    // } catch (e){
-    //   console.log(e);
-    // }
-    // try {
-    //   result.innerText = toFind.innerText;
-    // } catch (e){
-    //   console.log(e);
-    // }
-    result.isSuccess = true;
+  if (tags && tags.length > 0 ){
+    result.value = tags;
   } else {
     util.log( propertyValue, 'did not find');
     result.errorMessage = 'did not find'+propertyValue;
